@@ -28,7 +28,7 @@ NODE_ID = "node_id"
 
 
 def from_geopandas_nodelist(node_gdf, node_id=None, node_attr=None):
-    """Convert a GeoDataFrame in an empty GeoGraph (without edges).
+    """Convert a GeoDataFrame in an empty node GeoGraph (without edges).
 
     The GeoDataFrame should contain at least one column ('geometry') filled with Shapely geometries.
     Columns of the GeoDataFrame are converted in node attributes.
@@ -163,7 +163,7 @@ def from_geopandas_edgelist(
 
     if WEIGHT not in e_gdf.columns:
         e_gdf[WEIGHT] = e_gdf[GEOM].length
-    geo_gr = nx.from_pandas_edgelist(e_gdf, edge_attr=new_edge_attr)
+    geo_gr = nx.from_pandas_edgelist(e_gdf, source=source, target=target, edge_attr=new_edge_attr)
     crs = e_gdf.crs if e_gdf.crs else (n_gdf.crs if n_gdf_ok else None)
     geo_gr.graph["crs"] = crs.to_epsg()
     node_gr = gnx.from_geopandas_nodelist(n_gdf, node_id=node_id, node_attr=node_attr)

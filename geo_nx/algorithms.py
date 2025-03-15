@@ -15,7 +15,7 @@ WEIGHT = "weight"
 NODE_ID = "node_id"
 
 
-def compose(geo_g, geo_h):
+def compose(geo_g, geo_h, first_label_h : int|None = None):
     """Compose GeoGraph geo_g with geo_h by combining nodes and edges into a single graph.
 
     The node sets and edges sets do not need to be disjoint.
@@ -26,6 +26,7 @@ def compose(geo_g, geo_h):
     Parameters
     ----------
     geo_g, geo_h : GeoGraph
+    first_label_h : If not None, relabel h with the first value defined by first_label_h
 
     Returns
     -------
@@ -39,6 +40,9 @@ def compose(geo_g, geo_h):
     if geo_g.graph['crs'] != geo_h.graph['crs']:
         raise GeonxError(
             "geo_g and geo_h must both have the same crs attribute.")
+    
+    if first_label_h: 
+        geo_h = nx.convert_node_labels_to_integers(geo_h, first_label=first_label_h)
     geo_gh = nx.compose(geo_g, geo_h)
     geo_gh.graph['crs'] = geo_g.graph['crs']
     return geo_gh

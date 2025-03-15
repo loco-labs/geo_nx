@@ -17,6 +17,20 @@ lyon = Point(4.8357, 45.7640)
 marseille = Point(5.3691, 43.3026)
 bordeaux = Point(-0.56667, 44.833328)
 
+class TestAlgorithms(unittest.TestCase):
+    """tests Algorithms functions"""
+    
+    def test_compose(self):
+        """ tests compose function"""
+        simplemap = gpd.GeoDataFrame({'geometry': [LineString([paris, lyon]), LineString([lyon, marseille]), 
+            LineString([paris, bordeaux]), LineString([bordeaux, marseille])]}, crs=4326).to_crs(2154)
+        gr_simple = gnx.from_geopandas_edgelist(simplemap)
+        gr_simple2 = gnx.from_geopandas_edgelist(simplemap)
+        gr_compose = gnx.compose(gr_simple, gr_simple2)
+        self.assertEqual(len(gr_compose), len(gr_simple))
+        gr_compose = gnx.compose(gr_simple, gr_simple2, max(gr_simple.nodes) + 1)
+        self.assertEqual(len(gr_compose), len(gr_simple) * 2)
+    
 class TestGeoDiGraph(unittest.TestCase):
     """tests GeoDiGraph class"""
 
