@@ -2,16 +2,12 @@
 """
 This module contains the `GeoGraph` class.
 """
-import geo_nx as gnx
+import geo_nx as gnx  # type: ignore
 import geopandas as gpd
-import folium
 import networkx as nx
 from shapely import LineString
-from geo_nx.convert import to_geopandas_edgelist, to_geopandas_nodelist
-from geo_nx.convert import explore
-from geo_nx.utils import geo_cut, cast_id, geo_merge
-from geo_nx.algorithms import weight_extend, weight_node_to_graph
-from geo_nx.geogr import GeoGr
+from geo_nx.utils import geo_cut, cast_id, geo_merge  # type: ignore
+from geo_nx.geogr import GeoGr  # type: ignore
 
 GEOM = "geometry"
 WEIGHT = "weight"
@@ -29,7 +25,7 @@ class GeoGraph(nx.Graph, GeoGr):
 
     *instance methods*
 
-    - `to_directed`    
+    - `to_directed`
     - `insert_node`
     - `erase_linear_nodes`
     - `project_node`
@@ -254,7 +250,7 @@ class GeoGraph(nx.Graph, GeoGr):
     def to_directed(self):
         """Returns an undirected copy of the graph."""
         return gnx.GeoDiGraph(super().to_directed(self), crs=self.graph["crs"])
-    
+
     def find_nearest_edge(self, geom, max_distance):
         """Find the closest edge to a geometry
 
